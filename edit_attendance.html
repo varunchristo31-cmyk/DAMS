@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Attendance - DAMS</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            width: 60%;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .update-btn {
+            margin-top: 25px;
+            padding: 12px 25px;
+            background-color: #198754;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background-color: #146c43;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back-btn:hover {
+            background-color: #5c636a;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h2>Edit Attendance</h2>
+
+
+    <form action="/update_attendance" method="POST">
+
+
+        <!-- Attendance ID -->
+
+        <label>
+            Attendance ID
+        </label>
+
+        <input
+            type="text"
+            name="id"
+            value="{{ attendance[0] }}"
+            readonly>
+
+
+        <!-- Student ID -->
+
+        <label>
+            Student ID
+        </label>
+
+        <input
+            type="text"
+            name="studentid"
+            value="{{ attendance[1] }}"
+            readonly>
+
+
+        <!-- Student Name -->
+
+        <label>
+            Student Name
+        </label>
+
+        <input
+            type="text"
+            name="studentname"
+            value="{{ attendance[2] }}"
+            readonly>
+
+
+        <!-- Activity ID -->
+
+        <label>
+            Activity ID
+        </label>
+
+        <input
+            type="text"
+            name="activityid"
+            value="{{ attendance[3] }}"
+            readonly>
+
+
+        <!-- Activity Name -->
+
+        <label>
+            Activity / Event
+        </label>
+
+        <input
+            type="text"
+            name="activityname"
+            value="{{ attendance[4] }}"
+            readonly>
+
+
+        <!-- Attendance Date -->
+
+        <label>
+            Attendance Date
+        </label>
+
+        <input
+            type="date"
+            name="attendancedate"
+            value="{{ attendance[5] }}"
+            readonly>
+
+
+        <!-- Status -->
+
+        <label>
+            Attendance Status
+        </label>
+
+        <select
+            name="status"
+            required>
+
+            <option
+                value="Present"
+                {% if attendance[6] == 'Present' %}
+                    selected
+                {% endif %}>
+                Present
+            </option>
+
+            <option
+                value="Absent"
+                {% if attendance[6] == 'Absent' %}
+                    selected
+                {% endif %}>
+                Absent
+            </option>
+
+        </select>
+
+
+        <button
+            type="submit"
+            class="update-btn">
+
+            Update Attendance
+
+        </button>
+
+    </form>
+
+
+    <br>
+
+    <a
+        href="/view_attendance"
+        class="back-btn">
+
+        Back to Attendance Records
+
+    </a>
+
+</div>
+
+</body>
+
+</html>

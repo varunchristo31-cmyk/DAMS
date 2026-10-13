@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student List - DAMS</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        .top-header {
+            background: linear-gradient(135deg, #123f91, #0dcaf0);
+            color: white;
+            padding: 22px 0;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .brand i {
+            margin-right: 8px;
+        }
+
+        .container-main {
+            margin-top: 40px;
+            margin-bottom: 50px;
+        }
+
+        .page-title {
+            color: #183b6b;
+            font-weight: bold;
+        }
+
+        .page-subtitle {
+            color: #6c7f95;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        .table {
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background: #123f91;
+            color: white;
+            padding: 14px;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 14px;
+            white-space: nowrap;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f7ff;
+        }
+
+        .serial-number {
+            font-weight: bold;
+            color: #123f91;
+        }
+
+        .student-id {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .btn-edit {
+            background: #0d6efd;
+            color: white;
+            border-radius: 7px;
+            padding: 7px 12px;
+            text-decoration: none;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .btn-edit:hover {
+            background: #0b5ed7;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            border-radius: 7px;
+            padding: 7px 12px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-delete:hover {
+            background: #bb2d3b;
+            color: white;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+
+        .footer {
+            background: #203c63;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="top-header">
+
+        <div class="container">
+
+            <div class="brand">
+                <i class="bi bi-mortarboard-fill"></i>
+                DAMS
+            </div>
+
+            <small>
+                Department Activity Management System
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="container container-main">
+
+        <div class="mb-4">
+
+            <h2 class="page-title">
+                <i class="bi bi-people-fill"></i>
+                Student List
+            </h2>
+
+            <p class="page-subtitle">
+                View and manage registered students
+            </p>
+
+        </div>
+
+
+        <!-- ================= TABLE ================= -->
+
+        <div class="table-card">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <!-- NEW S.NO -->
+
+                            <th>
+                                S.No
+                            </th>
+
+                            <th>
+                                Student ID
+                            </th>
+
+                            <th>
+                                Register No
+                            </th>
+
+                            <th>
+                                Student Name
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th>
+                                Year
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Mobile No
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for student in students %}
+
+                        <tr>
+
+                            <!-- S.NO -->
+
+                            <td class="serial-number">
+                                {{ loop.index }}
+                            </td>
+
+
+                            <!-- REAL STUDENT ID -->
+
+                            <td class="student-id">
+                                {{ student[0] }}
+                            </td>
+
+
+                            <!-- REGISTER NUMBER -->
+
+                            <td>
+                                {{ student[1] }}
+                            </td>
+
+
+                            <!-- STUDENT NAME -->
+
+                            <td>
+                                <strong>
+                                    {{ student[2] }}
+                                </strong>
+                            </td>
+
+
+                            <!-- DEPARTMENT -->
+
+                            <td>
+                                {{ student[3] }}
+                            </td>
+
+
+                            <!-- YEAR -->
+
+                            <td>
+                                {{ student[4] }}
+                            </td>
+
+
+                            <!-- EMAIL -->
+
+                            <td>
+                                {{ student[5] or '' }}
+                            </td>
+
+
+                            <!-- MOBILE -->
+
+                            <td>
+                                {{ student[6] or '' }}
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <a
+                                    href="/edit_student/{{ student[0] }}"
+                                    class="btn-edit">
+
+                                    <i class="bi bi-pencil-square"></i>
+                                    Edit
+
+                                </a>
+
+
+                                <a
+                                    href="/delete_student/{{ student[0] }}"
+                                    class="btn-delete"
+                                    onclick="return confirm('Are you sure you want to delete this student?');">
+
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- BACK BUTTON -->
+
+        <a
+            href="/dashboard"
+            class="btn btn-secondary back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div>
+            © 2026 DAMS - Department Activity Management System
+        </div>
+
+        <small>
+            Department Activity Management System
+        </small>
+
+    </footer>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+
+</html>

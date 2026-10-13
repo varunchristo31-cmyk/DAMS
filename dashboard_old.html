@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DAMS Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<h1>Department Activity Management System</h1>
+
+<h2>Welcome to Dashboard</h2>
+
+<div>
+    <h3>Admin Panel</h3>
+
+    <a href="/student">
+        <button>👨‍🎓 Manage Students</button>
+    </a>
+
+    <br><br>
+
+    <a href="/faculty">
+        <button>👩‍🏫 Manage Faculty</button>
+    </a>
+
+    <br><br>
+
+    <a href="/activities">
+        <button>📅 Manage Activities</button>
+    </a>
+
+    <br><br>
+
+    <a href="/reports">
+        <button>📊 View Reports</button>
+    </a>
+
+    <br><br>
+
+    <a href="/">
+        <button>🚪 Logout</button>
+    </a>
+</div>
+
+</body>
+</html>

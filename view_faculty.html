@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Faculty Management - DAMS</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+</head>
+
+<body class="bg-light">
+
+<div class="container-fluid">
+
+    <!-- Header -->
+    <div class="bg-dark text-white p-4 mb-4">
+        <h2 class="mb-1">
+            <i class="bi bi-building"></i>
+            DAMS
+        </h2>
+
+        <p class="mb-0">
+            Department Activity Management System
+        </p>
+    </div>
+
+    <div class="container">
+
+        <!-- Page Heading -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+                <h2>
+                    <i class="bi bi-person-badge"></i>
+                    Faculty Management
+                </h2>
+
+                <p class="text-muted">
+                    Add and manage faculty information
+                </p>
+            </div>
+
+            <a href="{{ url_for('faculty') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>
+                Add Faculty
+            </a>
+
+        </div>
+
+        <!-- Faculty Table -->
+        <div class="card shadow-sm">
+
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Faculty List</h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover align-middle">
+
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Faculty ID</th>
+                                <th>Faculty Name</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% if faculty %}
+
+                                {% for f in faculty %}
+
+                                <tr>
+                                    <td>{{ f[0] }}</td>
+                                    <td>{{ f[1] }}</td>
+                                    <td>{{ f[2] }}</td>
+                                    <td>{{ f[3] }}</td>
+                                    <td>{{ f[4] }}</td>
+                                    <td>{{ f[5] }}</td>
+
+                                    <td>
+                                        <a
+                                            href="{{ url_for('edit_faculty', id=f[0]) }}"
+                                            class="btn btn-sm btn-warning"
+                                        >
+                                            <i class="bi bi-pencil"></i>
+                                            Edit
+                                        </a>
+
+                                        <a
+                                            href="/delete_faculty/{{ f[0] }}"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this faculty record?');"
+                                        >
+                                            <i class="bi bi-trash"></i>
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-4">
+                                        <i class="bi bi-info-circle"></i>
+                                        No faculty records found.
+                                    </td>
+                                </tr>
+
+                            {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Back Button: Role-Based Navigation -->
+        <div class="mt-3">
+
+            {% if session.get('role', '')|lower == 'faculty' %}
+
+                <a
+                    href="{{ url_for('faculty_dashboard') }}"
+                    class="btn btn-secondary"
+                >
+                    <i class="bi bi-arrow-left"></i>
+                    Back to Faculty Dashboard
+                </a>
+
+            {% else %}
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="btn btn-secondary"
+                >
+                    <i class="bi bi-arrow-left"></i>
+                    Back to Admin Dashboard
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-muted mt-5 mb-3">
+    © 2026 DAMS - Department Activity Management System
+</footer>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+</html>

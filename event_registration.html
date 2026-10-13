@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Event Registration - DAMS</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f7fb;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #123f91, #0dcaf0) !important;
+        }
+
+        .page-container {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .card {
+            border: none;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #123f91, #0dcaf0) !important;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-label {
+            color: #343a40;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 45px;
+            border-radius: 8px;
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 10px 16px;
+        }
+
+        .page-footer {
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+            padding: 20px 10px;
+        }
+
+        @media (max-width: 576px) {
+            .page-container {
+                margin: 20px auto;
+                padding: 0 12px;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+            }
+
+            .form-buttons .btn {
+                width: 100%;
+            }
+
+            .navbar-brand span {
+                display: block;
+                margin-left: 0 !important;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<nav class="navbar navbar-dark">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="/dashboard">
+            <strong>DAMS</strong>
+            <span class="ms-2">
+                Department Activity Management System
+            </span>
+        </a>
+
+        <a href="/logout" class="btn btn-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="container page-container">
+
+    <div class="card shadow">
+
+        <!-- CARD HEADER -->
+        <div class="card-header text-white">
+            <h4 class="mb-1">
+                <i class="bi bi-calendar-check me-2"></i>
+                Event Registration
+            </h4>
+
+            <p class="mb-0">
+                Register a student for a department activity or event.
+            </p>
+        </div>
+
+        <!-- CARD BODY -->
+        <div class="card-body">
+
+            <!-- ERROR / FLASH MESSAGES -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show"
+                             role="alert">
+                            {{ message }}
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- REGISTRATION FORM -->
+            <form action="{{ url_for('register_event') }}" method="POST">
+
+                <!-- STUDENT -->
+                <div class="mb-4">
+
+                    <label for="studentid" class="form-label fw-bold">
+                        <i class="bi bi-person-fill me-1"></i>
+                        Student
+                    </label>
+
+                    {% if student %}
+
+                        <!-- Student login -->
+                        <input
+                            type="hidden"
+                            name="studentid"
+                            id="studentid"
+                            value="{{ student[0] }}">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ student[1] }} - {{ student[2] }}"
+                            readonly>
+
+                    {% else %}
+
+                        <!-- Admin / Faculty login -->
+                        <select
+                            name="studentid"
+                            id="studentid"
+                            class="form-select"
+                            required>
+
+                            <option value="">Select Student</option>
+
+                            {% for s in students %}
+                                <option value="{{ s[0] }}">
+                                    {{ s[1] }} - {{ s[2] }} - {{ s[3] }}
+                                </option>
+                            {% endfor %}
+
+                        </select>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- ACTIVITY -->
+                <div class="mb-4">
+
+                    <label for="activityid" class="form-label fw-bold">
+                        <i class="bi bi-calendar-event me-1"></i>
+                        Activity
+                    </label>
+
+                    <select
+                        name="activityid"
+                        id="activityid"
+                        class="form-select"
+                        required>
+
+                        <option value="">Select Activity</option>
+
+                        {% for a in activities %}
+                            <option value="{{ a[0] }}">
+                                {{ a[1] }}
+                                {% if a[3] %}
+                                    - {{ a[3] }}
+                                {% endif %}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <!-- REGISTRATION DATE -->
+                <div class="mb-4">
+
+                    <label for="registrationdate" class="form-label fw-bold">
+                        <i class="bi bi-calendar-date me-1"></i>
+                        Registration Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="registrationdate"
+                        id="registrationdate"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="d-flex flex-wrap gap-2 form-buttons">
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Register Event
+                    </button>
+
+                    {% set user_role = session.get('role', '')|lower %}
+
+                    {% if user_role == 'admin' %}
+
+                        <a href="{{ url_for('dashboard') }}"
+                           class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Back to Dashboard
+                        </a>
+
+                    {% elif user_role == 'faculty' %}
+
+                        <a href="{{ url_for('faculty_dashboard') }}"
+                           class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Back to Dashboard
+                        </a>
+
+                    {% elif user_role == 'student' %}
+
+                        <a href="{{ url_for('student_dashboard') }}"
+                           class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Back to Dashboard
+                        </a>
+
+                    {% else %}
+
+                        <a href="{{ url_for('login') }}"
+                           class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Back to Login
+                        </a>
+
+                    {% endif %}
+
+                    <a href="{{ url_for('view_event_registrations') }}"
+                       class="btn btn-primary">
+                        <i class="bi bi-list me-1"></i>
+                        View Registrations
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+    &copy; 2026 DAMS - Department Activity Management System
+</footer>
+
+<!-- Bootstrap JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<!-- Set today's date by default -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dateInput = document.getElementById("registrationdate");
+
+        if (dateInput && !dateInput.value) {
+            const today = new Date();
+            const localDate = new Date(
+                today.getTime() - today.getTimezoneOffset() * 60000
+            ).toISOString().split("T")[0];
+
+            dateInput.value = localDate;
+        }
+    });
+</script>
+
+</body>
+</html>

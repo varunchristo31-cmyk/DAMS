@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DAMS Dashboard</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #f4f7fb;
+        font-family: Arial, sans-serif;
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 250px;
+        height: 100vh;
+        background: linear-gradient(180deg, #0d6efd, #084298);
+        color: white;
+        padding-top: 25px;
+        z-index: 1000;
+    }
+
+    .sidebar h3 {
+        text-align: center;
+        margin-bottom: 35px;
+        font-weight: bold;
+    }
+
+    .sidebar a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 15px 25px;
+        font-size: 17px;
+        transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+        background: white;
+        color: #0d6efd;
+        padding-left: 35px;
+    }
+
+    .sidebar i {
+        margin-right: 10px;
+    }
+
+    /* ================= MAIN ================= */
+
+    .main {
+        margin-left: 250px;
+        padding: 25px;
+    }
+
+    /* ================= HEADER ================= */
+
+    .top-header {
+        background: white;
+        padding: 20px 25px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .top-header h2 {
+        font-weight: bold;
+    }
+
+    /* ================= STATISTICS ================= */
+
+    .stat-card {
+        border: none;
+        border-radius: 18px;
+        color: white;
+        min-height: 150px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        transition: 0.3s;
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.18);
+    }
+
+    .stat-icon {
+        font-size: 34px;
+        margin-bottom: 8px;
+    }
+
+    .stat-number {
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    .students {
+        background: linear-gradient(135deg, #0d6efd, #4dabf7);
+    }
+
+    .faculty {
+        background: linear-gradient(135deg, #198754, #20c997);
+    }
+
+    .activities {
+        background: linear-gradient(135deg, #ffb300, #ff8f00);
+    }
+
+    .events {
+        background: linear-gradient(135deg, #dc3545, #ff6b6b);
+    }
+
+    .attendance {
+        background: linear-gradient(135deg, #212529, #495057);
+    }
+
+    /* ================= SECTION ================= */
+
+    .section-card {
+        background: white;
+        border: none;
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+
+    .section-title {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* ================= QUICK ACTIONS ================= */
+
+    .quick-btn {
+        width: 100%;
+        margin-bottom: 12px;
+        padding: 13px;
+        border-radius: 10px;
+        font-weight: 600;
+        border: none;
+        transition: 0.3s;
+    }
+
+    .quick-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    /* ================= RECENT ACTIVITIES ================= */
+
+    .activity-item {
+        border: none;
+        border-bottom: 1px solid #eee;
+        padding: 15px 5px;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-icon {
+        font-size: 20px;
+        margin-right: 10px;
+    }
+
+    /* ================= NOTIFICATIONS ================= */
+
+    .notification {
+        border-radius: 12px;
+        border: none;
+    }
+
+    /* ================= FOOTER ================= */
+
+    .footer {
+        text-align: center;
+        margin-top: 35px;
+        padding: 20px;
+        color: #6c757d;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 768px) {
+
+        .sidebar {
+            width: 200px;
+        }
+
+        .main {
+            margin-left: 200px;
+            padding: 15px;
+        }
+
+        .sidebar a {
+            font-size: 14px;
+            padding: 12px 15px;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- ================================================= -->
+
+<!-- SIDEBAR -->
+
+<!-- ================================================= -->
+
+<div class="sidebar">
+
+<h3>
+    <i class="bi bi-mortarboard-fill"></i>
+    DAMS
+</h3>
+
+<!-- ADMIN DASHBOARD -->
+<a href="/dashboard">
+    <i class="bi bi-speedometer2"></i>
+    Dashboard
+</a>
+
+<!-- STUDENTS -->
+<a href="/view_students">
+    <i class="bi bi-people-fill"></i>
+    Students
+</a>
+
+<!-- FACULTY -->
+<!-- IMPORTANT: Admin must go to /view_faculty -->
+<a href="/view_faculty">
+    <i class="bi bi-person-badge-fill"></i>
+    Faculty
+</a>
+
+<!-- ACTIVITIES -->
+<a href="/view_activities">
+    <i class="bi bi-calendar-event-fill"></i>
+    Activities
+</a>
+
+<!-- EVENT REGISTRATION -->
+<a href="/event_registration">
+    <i class="bi bi-pencil-square"></i>
+    Event Registration
+</a>
+
+<!-- ATTENDANCE -->
+<a href="/attendance">
+    <i class="bi bi-check2-square"></i>
+    Attendance
+</a>
+
+<!-- CERTIFICATES -->
+<a href="/certificates">
+    <i class="bi bi-award-fill"></i>
+    Certificates
+</a>
+
+<!-- REPORTS -->
+<a href="/reports">
+    <i class="bi bi-bar-chart-fill"></i>
+    Reports
+</a>
+
+<!-- LOGOUT -->
+<a href="/logout">
+    <i class="bi bi-box-arrow-right"></i>
+    Logout
+</a>
+
+
+</div>
+
+<!-- ================================================= -->
+
+<!-- MAIN CONTENT -->
+
+<!-- ================================================= -->
+
+<div class="main">
+
+
+<!-- HEADER -->
+
+<div class="top-header d-flex justify-content-between align-items-center">
+
+    <div>
+
+        <h2 class="mb-1">
+            <i class="bi bi-speedometer2 text-primary"></i>
+            Dashboard Overview
+        </h2>
+
+        <p class="text-muted mb-0">
+            Department Activity Management System
+        </p>
+
+    </div>
+
+    <!-- LOGOUT -->
+    <a href="/logout" class="btn btn-danger">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+    </a>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- STATISTICS CARDS -->
+<!-- ================================================= -->
+
+<div class="row g-3 mb-4">
+
+    <!-- TOTAL STUDENTS -->
+
+    <div class="col">
+
+        <div class="stat-card students">
+
+            <div class="card-body text-center p-4">
+
+                <div class="stat-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <h6>Total Students</h6>
+
+                <div class="stat-number">
+                    {{ total_students }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOTAL FACULTY -->
+
+    <div class="col">
+
+        <div class="stat-card faculty">
+
+            <div class="card-body text-center p-4">
+
+                <div class="stat-icon">
+                    <i class="bi bi-person-badge-fill"></i>
+                </div>
+
+                <h6>Total Faculty</h6>
+
+                <div class="stat-number">
+                    {{ total_faculty }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOTAL ACTIVITIES -->
+
+    <div class="col">
+
+        <div class="stat-card activities">
+
+            <div class="card-body text-center p-4">
+
+                <div class="stat-icon">
+                    <i class="bi bi-calendar-event-fill"></i>
+                </div>
+
+                <h6>Total Activities</h6>
+
+                <div class="stat-number">
+                    {{ total_activities }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOTAL EVENTS -->
+
+    <div class="col">
+
+        <div class="stat-card events">
+
+            <div class="card-body text-center p-4">
+
+                <div class="stat-icon">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+
+                <h6>Total Events</h6>
+
+                <div class="stat-number">
+                    {{ total_events }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOTAL ATTENDANCE -->
+
+    <div class="col">
+
+        <div class="stat-card attendance">
+
+            <div class="card-body text-center p-4">
+
+                <div class="stat-icon">
+                    <i class="bi bi-check2-circle"></i>
+                </div>
+
+                <h6>Total Attendance</h6>
+
+                <div class="stat-number">
+                    {{ total_attendance }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- QUICK ACTIONS -->
+<!-- ================================================= -->
+
+<div class="section-card mb-4">
+
+    <h3 class="section-title">
+
+        <i class="bi bi-lightning-fill text-warning"></i>
+
+        Quick Actions
+
+    </h3>
+
+
+    <div class="row">
+
+        <!-- ADD STUDENT -->
+
+        <div class="col-md-4">
+
+            <a href="/student"
+               class="btn btn-primary quick-btn">
+
+                <i class="bi bi-person-plus-fill"></i>
+
+                Add Student
+
+            </a>
+
+        </div>
+
+
+        <!-- ADD FACULTY -->
+
+        <div class="col-md-4">
+
+            <a href="/faculty"
+               class="btn btn-success quick-btn">
+
+                <i class="bi bi-person-plus"></i>
+
+                Add Faculty
+
+            </a>
+
+        </div>
+
+
+        <!-- ADD ACTIVITY -->
+
+        <div class="col-md-4">
+
+            <a href="/activities"
+               class="btn btn-warning quick-btn">
+
+                <i class="bi bi-plus-circle"></i>
+
+                Add Activity
+
+            </a>
+
+        </div>
+
+
+        <!-- REGISTER EVENT -->
+
+        <div class="col-md-4">
+
+            <a href="/event_registration"
+               class="btn btn-danger quick-btn">
+
+                <i class="bi bi-pencil-square"></i>
+
+                Register Event
+
+            </a>
+
+        </div>
+
+
+        <!-- ATTENDANCE -->
+
+        <div class="col-md-4">
+
+            <a href="/attendance"
+               class="btn btn-dark quick-btn">
+
+                <i class="bi bi-check2-square"></i>
+
+                Attendance
+
+            </a>
+
+        </div>
+
+
+        <!-- CERTIFICATES -->
+
+        <div class="col-md-4">
+
+            <a href="/certificates"
+               class="btn btn-info quick-btn">
+
+                <i class="bi bi-award-fill"></i>
+
+                Certificates
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- CHART + RECENT ACTIVITIES -->
+<!-- ================================================= -->
+
+<div class="row g-4">
+
+    <!-- CHART -->
+
+    <div class="col-lg-7">
+
+        <div class="section-card">
+
+            <h4 class="section-title">
+
+                <i class="bi bi-bar-chart-fill text-primary"></i>
+
+                DAMS Statistics
+
+            </h4>
+
+            <canvas id="damsChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECENT ACTIVITIES -->
+
+    <div class="col-lg-5">
+
+        <div class="section-card">
+
+            <h4 class="section-title">
+
+                <i class="bi bi-clock-history text-success"></i>
+
+                Recent Activities
+
+            </h4>
+
+
+            <div class="activity-item">
+
+                <i class="bi bi-calendar-event-fill text-primary activity-icon"></i>
+
+                Department Activity
+
+            </div>
+
+
+            <div class="activity-item">
+
+                <i class="bi bi-people-fill text-success activity-icon"></i>
+
+                Student Management
+
+            </div>
+
+
+            <div class="activity-item">
+
+                <i class="bi bi-person-badge-fill text-warning activity-icon"></i>
+
+                Faculty Management
+
+            </div>
+
+
+            <div class="activity-item">
+
+                <i class="bi bi-check-circle-fill text-danger activity-icon"></i>
+
+                Attendance Management
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- NOTIFICATIONS -->
+<!-- ================================================= -->
+
+<div class="section-card mt-4">
+
+    <h4 class="section-title">
+
+        <i class="bi bi-bell-fill text-warning"></i>
+
+        Notifications
+
+    </h4>
+
+
+    <div class="alert alert-primary notification">
+
+        <i class="bi bi-info-circle-fill"></i>
+
+        Welcome to the DAMS Admin Dashboard.
+
+    </div>
+
+
+    <div class="alert alert-success notification">
+
+        <i class="bi bi-check-circle-fill"></i>
+
+        Dashboard is running successfully.
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- FOOTER -->
+<!-- ================================================= -->
+
+<div class="footer">
+
+    <strong>
+        Department Activity Management System
+    </strong>
+
+    <br>
+
+    © 2026 Don Bosco College, Yelagiri Hills
+
+    <br>
+
+    Developed for Department of Computer Science
+
+</div>
+
+
+</div>
+
+<!-- ================================================= -->
+
+<!-- CHART.JS -->
+
+<!-- ================================================= -->
+
+<script>
+
+const ctx = document.getElementById('damsChart');
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: [
+            'Students',
+            'Faculty',
+            'Activities',
+            'Events',
+            'Attendance'
+        ],
+
+        datasets: [{
+
+            label: 'DAMS Statistics',
+
+            data: [
+
+                {{ total_students }},
+                {{ total_faculty }},
+                {{ total_activities }},
+                {{ total_events }},
+                {{ total_attendance }}
+
+            ],
+
+            borderWidth: 1
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                display: true
+            }
+
+        },
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true,
+
+                ticks: {
+                    stepSize: 1
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
